@@ -10,6 +10,8 @@ install.packages("ggplot2")
 install.packages("raster")
 install.packages("gridExtra")
 install.packages("ggnewscale")
+install.packages("ggspatial")
+install.packages("viridis")
 install_github("rretkute/PestDynamicsAndDispersal")
 ``` 
 
@@ -20,6 +22,8 @@ library(ggplot2)
 library(raster)
 library(gridExtra)
 library(ggnewscale)
+library(ggspatial)
+library(viridis)
 library(PestDynamicsAndDispersal)
 
 ###################
