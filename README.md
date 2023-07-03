@@ -15,7 +15,6 @@ install_github("rretkute/PestDynamicsAndDispersal")
 #### Example use
 
 ```r
-library(devtools)
 library(ggplot2)
 library(raster)
 library(gridExtra)
