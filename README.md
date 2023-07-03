@@ -124,7 +124,7 @@ fig2<-fig+
             aes(x=lng, y=lat, group=id, col=flt.tm)) +
   scale_color_viridis(option = "D", direction=-1)+
   geom_path(data=snth.pth[34:51,][1:7,], size=1,
-            aes(x=lng, y=lat, group=id), col='black') +
+            aes(x=lng, y=lat), col='black') +
   geom_point(data=Obs[1,], aes(x=lng, y=lat), pch=21,
              fill="red", size=4)+
   geom_point(data=lnd.pnts[3,], aes(x=lng, y=lat, fill=LandCover),
@@ -144,7 +144,7 @@ fig3<-fig+
             aes(x=lng, y=lat, group=id, col=flt.tm)) +
   scale_color_viridis(option = "D", direction=-1)+
   geom_path(data=snth.pth[34:51,][1:7,], size=1,
-            aes(x=lng, y=lat, group=id), col='black') +
+            aes(x=lng, y=lat), col='black') +
   geom_point(data=Obs[1,], aes(x=lng, y=lat), pch=21,
              fill="red", size=4)+
   geom_point(data=lnd.pnts[3,], aes(x=lng, y=lat, fill=LandCover),
@@ -164,7 +164,7 @@ fig4<-fig+
             aes(x=lng, y=lat, group=id, col=flt.tm)) +
   scale_color_viridis(option = "D", direction=-1)+
   geom_path(data=snth.pth[34:51,][1:7,], size=1,
-            aes(x=lng, y=lat, group=id), col='black') +
+            aes(x=lng, y=lat), col='black') +
   geom_point(data=Obs[1,], aes(x=lng, y=lat), pch=21,
              fill="red", size=4)+
   geom_point(data=lnd.pnts[3,], aes(x=lng, y=lat, fill=LandCover),
