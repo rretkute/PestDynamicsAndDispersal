@@ -1,0 +1,155 @@
+
+Main Options:
+Absolute or Relative Time?,  Backwards?, Fixed Met?, Flat Earth?,  Max # Field Output Groups, Max # Sources, Max # Field Reqs,                    Run Name,       Random Seed
+                  Absolute,          No,         No,          No,                       4000,          4000,             5000,   locust_traj_20210115_3860,  Fixed (Parallel)
+
+
+Restart File Options:
+# Cases Between Writes, Time Between Writes, Delete Old Files?, Write On Suspend?,
+                      ,                    ,               Yes,                No,
+
+
+Multiple Case Options:
+Dispersion Options Ensemble Size, Met Ensemble Size,
+                               1,                 1,
+
+
+OpenMP Options:
+Use OpenMP?, Threads, Particle Update Threads, Output Group Threads
+Yes,              12,                      12, 1
+
+
+Timer Options:
+Use Timers?, Summary Only?
+Yes,         Yes
+
+
+Output Options:
+Folder, 
+./
+
+
+Input Files:
+File Names
+/path/to/NAME/builds/Version8_2/Resources/Defns/MetDefnUMG_Mk10_L59PTpp.txt
+./sourcelocations.txt
+./sources.txt
+./tgrids.txt
+./output.txt
+
+
+Horizontal Coordinate Systems:
+Name
+Lat-Long
+
+
+Vertical Coordinate Systems:
+Name
+m agl
+
+
+! Use these grids to define the met output at takeoff location
+Horizontal Grids:
+Name,         Set of Locations,  dX,  dY 
+HGridForSrcs, Source Locations, 1.0, 1.0
+
+
+! Use these grids to output gridded met, e.g. soil moisture
+Horizontal Grids:
+Name,              H-Coord,   nX,        X Min,         X Max,   nY,      Y Min,      Y Max
+HGridForSources,  Lat-Long,  251,   24.9609375,    60.1171875,  322, -10.078125,  20.015625
+HGridForFields,   Lat-Long,  251,   24.9609375,    60.1171875,  322, -10.078125,  20.015625
+
+
+Vertical Grids:
+Name,               Z-Coord,  nZ,    dZ,    Z0,        Z-Array,      Av Z-Array,
+ZGridForMet,          m agl,    1,  0.0,  10.0,               ,                ,
+ZGridForSources,      m agl,    1,  0.0,  10.0,               ,                 ,
+
+
+Domains:
+Name,                H Unbounded?,    Z-Coord,     Z Max,  Z Unbounded?,    T Unbounded?,              Start Time,     Duration,  Max Travel Time
+Dispersion Domain,            Yes,      m agl,   20000.0,            No,              No,     15/01/2021 00:00:00,     24:00:00,         infinity
+
+
+Species:
+Name,             Category,   Half Life,  UV Loss Rate,  Surface Resistance, Deposition Velocity,  Mean aerosol diameter,  A rain - BC,  B rain - BC,  A snow - BC,  B snow - BC,  A rain - IC,  B rain - IC,  A snow - IC,  B snow - IC,  Molecular Weight,   Material Unit
+SWARM,   CHEMISTRY-SPECIES,      Stable,      0.00E+00,                    ,                    ,                       ,             ,             ,             ,             ,             ,             ,             ,             ,               0.0,               g                 
+
+
+Species Uses:
+Species,  On Particles?,  On Fields?, Advect Field?
+SWARM,              Yes,          No,            No            
+
+
+Sets of Dispersion Options:
+Max # Particles, Max # Full Particles, Max # Puffs, Max # Original Puffs, Skew Time, Velocity Memory Time, Mesoscale Velocity Memory Time, Inhomogeneous Time, DeltaOpt, Puff Time,  Sync Time, Time of Fixed Met, Computational Domain, Puff Interval, Deep Convection?, Radioactive Decay?, Agent Decay?, Dry Deposition?, Wet Deposition?, Turbulence?, Mesoscale Motions?, Chemistry?
+        9200000,                    2,           2,                    2,     00:00,                00:00,                          00:00,              00:00,        1,     00:00,   00:05:00,                  ,    Dispersion Domain,         00:30,               No,                 No,           No,              No,              No,         Yes,                Yes,         No
+
+
+! Use these requirements to define output of extra diagnostics.
+Output Requirements - Fields: 
+Quantity,         Species, Source,            T-Grid, H-Coord, Z-Coord, T Av Or Int, Sync?, Output Route, Output Format, Output Group 
+# Particles,             ,       ,         TGrid5Min,        ,        ,          No,   Yes,            D,            AF, Numbers
+# Particle Steps,        ,       ,         TGrid5Min,        ,        ,          No,   Yes,            D,            AF, Numbers
+Progress (%),            ,       ,         TGrid5Min,        ,        ,          No,   Yes,            D,            AF, Numbers
+Clock Time,              ,       ,         TGrid5Min,        ,        ,          No,   Yes,            D,            AF, Numbers
+
+
+NWP Met Module Instances:
+Name,       Min B L Depth, Max B L Depth, Use NWP BL Depth?, Delete Met?,                          Met Folder,             Topography Folder,    Met Definition Name, Update on Demand?,
+Global_PT2,          50.0,        4000.0,               Yes,          No,  /path/to/met/data/UMG_Mk10_L59PTpp,   /path/to/met/data/TopogData,      UMG_Mk10_L59PT2pp,               Yes,
+Global_PT3,          50.0,        4000.0,               Yes,          No,  /path/to/met/data/UMG_Mk10_L59PTpp,   /path/to/met/data/TopogData,      UMG_Mk10_L59PT3pp,               Yes,
+Global_PT6,          50.0,        4000.0,               Yes,          No,  /path/to/met/data/UMG_Mk10_L59PTpp,   /path/to/met/data/TopogData,      UMG_Mk10_L59PT6pp,               Yes,
+Global_PT7,          50.0,        4000.0,               Yes,          No,  /path/to/met/data/UMG_Mk10_L59PTpp,   /path/to/met/data/TopogData,      UMG_Mk10_L59PT7pp,               Yes,
+
+NWP Flow Module Instances: 
+Name,              Met Module,         Met,                    Domain,  Update on Demand?
+Global_PT2_flow,      NWP Met,  Global_PT2,   UMG_Mk10_L59PT2pp Whole,                Yes
+Global_PT3_flow,      NWP Met,  Global_PT3,   UMG_Mk10_L59PT3pp Whole,                Yes
+Global_PT6_flow,      NWP Met,  Global_PT6,   UMG_Mk10_L59PT6pp Whole,                Yes
+Global_PT7_flow,      NWP Met,  Global_PT7,   UMG_Mk10_L59PT7pp Whole,                Yes
+
+Flow Order: Update
+Flow Module, Flow
+NWP Flow,    Global_PT2_flow
+NWP Flow,    Global_PT3_flow
+NWP Flow,    Global_PT6_flow
+NWP Flow,    Global_PT7_flow
+
+Flow Order: Convert
+Flow Module, Flow
+NWP Flow,    Global_PT2_flow
+NWP Flow,    Global_PT3_flow
+NWP Flow,    Global_PT6_flow
+NWP Flow,    Global_PT7_flow
+
+Flow Order: Flow
+Flow Module, Flow
+NWP Flow,    Global_PT2_flow
+NWP Flow,    Global_PT3_flow
+NWP Flow,    Global_PT6_flow
+NWP Flow,    Global_PT7_flow
+
+Flow Order: Cloud
+Flow Module, Flow
+NWP Flow,    Global_PT2_flow
+NWP Flow,    Global_PT3_flow
+NWP Flow,    Global_PT6_flow
+NWP Flow,    Global_PT7_flow
+
+Flow Order: Rain
+Flow Module, Flow
+NWP Flow,    Global_PT2_flow
+NWP Flow,    Global_PT3_flow
+NWP Flow,    Global_PT6_flow
+NWP Flow,    Global_PT7_flow
+
+Flow Attributes:
+Name,    Flow Order
+Update,  Update
+Convert, Convert
+Flow,    Flow
+Cloud,   Cloud
+Rain,    Rain
+

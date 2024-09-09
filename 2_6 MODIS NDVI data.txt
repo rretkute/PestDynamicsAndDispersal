@@ -1,0 +1,70 @@
+
+var startd = '2024-01-01'; var endd =ee.Date(Date.now());
+    
+var boundaries = ee.FeatureCollection('USDOS/LSIB_SIMPLE/2017');
+var country_names = ["KE", "ET", "SO", "DJ", "ER"];
+var country = boundaries.filter(ee.Filter.inList('country_co', country_names));
+// Get the geometry of the countries
+var region = country.geometry();
+
+Map.setCenter(35.682408, 1.422768, 6);
+
+var dataset = ee.ImageCollection("MODIS/061/MOD13Q1") // 250m
+                  .filter(ee.Filter.date(startd,  endd));
+                  
+var img=dataset.first();                
+print('Projection, crs, and crs_transform:', img.projection());
+print('Scale in meters:', img.projection().nominalScale());
+                  
+ var collectionNDVI = dataset.select('NDVI');
+//var collectionNDVI = dataset.select('EVI');
+
+// Clip the geometry using a map function
+function clipImage(image) {
+  return image.clip(region);
+}
+var collectionNDVI = collectionNDVI.map(clipImage);
+var meanNDVI=collectionNDVI.first().multiply(0.0001)
+
+var colorizedVis = {
+  min: -0.2,
+  max: 1,
+  palette: [
+    'FFFFFF', 'CE7E45', 'DF923D', 'F1B555', 'FCD163', '99B718', '74A901',
+    '66A000', '529400', '3E8601', '207401', '056201', '004C00', '023B01',
+    '012E01', '011D01', '011301'
+  ],
+};
+
+Map.addLayer(meanNDVI, colorizedVis, 'NDVI');
+
+
+// Country boundary data
+var countries = ee.FeatureCollection(
+    'projects/google/examples/population-explorer/LSIB_SIMPLE-with-GHSL_POP');
+var COUNTRIES_STYLE = {color: 'white', fillColor: '00000000'};
+Map.addLayer(countries.style(COUNTRIES_STYLE));
+
+///export maps
+var sizeNDVI = collectionNDVI.size().getInfo();
+var NDVIlist = collectionNDVI.toList(sizeNDVI);
+
+for (var n=0; n<sizeNDVI; n++) {
+  var imageNDVI = ee.Image(NDVIlist.get(n))
+  var dateNDVI = ee.Date(imageNDVI.get('system:time_start')).format('yyyy-MM-dd');
+  dateNDVI = dateNDVI.getInfo();
+  var nameNDVI = 'AH_NDVI_16d_1km_' +  dateNDVI;
+  print(nameNDVI);
+  
+ Export.image.toDrive({
+    image: imageNDVI,
+    description: nameNDVI,
+    crs: 'EPSG:4326',
+    fileNamePrefix: nameNDVI, // this is the name actually
+    folder: 'GEE Locusts',
+    scale: 1000,
+    region: region,
+      maxPixels: 5000000000,
+  fileFormat: "GeoTIFF"
+  }) 
+}

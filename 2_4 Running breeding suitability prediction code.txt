@@ -1,0 +1,124 @@
+
+var no_trees = 100;
+
+var country_names = ["ET", "KE", "SO", "DJ", "ER"];
+var country = boundaries.filter(ee.Filter.inList('country_co', country_names));
+// Get the geometry of the countries
+var region = country.geometry();
+Map.centerObject(region, 5);
+
+var filterAbs = ee.Filter.inList('presence', [0]);
+var filterPres = ee.Filter.inList('presence', [1]);
+
+var hoppersAll = hoppersbandsdata.filter(filterPres).geometry();
+
+hoppersbandsdata = hoppersbandsdata.filterBounds(region);
+var absence = hoppersbandsdata.filter(filterAbs);
+var locusts = hoppersbandsdata.filter(filterPres);
+
+
+// Load covariates
+
+// Digital terrain
+var trn = ee.Image("CGIAR/SRTM90_V4");
+
+          
+// Sand content
+var sndcnt = SND_CNT          
+        .select('b1')
+        .clip(region)
+          .rename('Sand_content');
+
+// Clay content
+var clcnt = CL_CNT          
+        .select('b1')
+        .clip(region)
+        .rename('Clay_content');
+
+Map.addLayer(sndcnt, {min: 0, max: 100}, 'sndcnt');
+Map.addLayer(clcnt, {min: 0, max: 100}, 'clcnt');
+
+var img = sndcnt  
+    .addBands(clcnt)
+    .addBands(trn)
+;
+
+
+// print(img);
+ 
+ //Create a variable called image to select the bands of interest and clip to geometry
+var image = img;//.clip(region);
+
+
+var trainingSample = image.sampleRegions({
+    collection: hoppersbandsdata, // Set of geometries selected for training
+    properties: ['presence'], // Label from each geometry
+    scale: 1000 // Size of pixel
+    });
+
+
+var bandNames = image.bandNames();
+var classifier = ee.Classifier.smileRandomForest(no_trees, 2)
+   .setOutputMode('PROBABILITY')
+    .train(trainingSample,'presence',bandNames);
+ 
+var dict = classifier.explain();
+//print('Explain:',dict);
+
+var variable_importance = ee.Feature(null, ee.Dictionary(dict).get('importance'));
+
+var classifier_discr = ee.Classifier.smileRandomForest(no_trees, 2)
+//    .setOutputMode('PROBABILITY')
+    .train(trainingSample,'presence',bandNames);
+var trainAccuracy = classifier_discr.confusionMatrix();
+print('RF Resubstitution error matrix: ', trainAccuracy);
+print('RF Training overall accuracy: ', trainAccuracy.accuracy());
+
+var chart =
+  ui.Chart.feature.byProperty(variable_importance)
+    .setChartType('ColumnChart')
+    .setOptions({
+      title: 'Variable Importance',
+      legend: {position: 'none'},
+      hAxis: {title: 'Bands'},
+      vAxis: {title: 'Importance'}
+    });
+
+
+print(chart); 
+ 
+var classification = image.classify(classifier).multiply(100);
+ 
+ 
+ // Get information about the trained classifier.
+print('Results of trained classifier', classifier.explain());
+
+
+// Predict
+var countries = boundaries.filter(ee.Filter.inList('country_co', 
+["ET", "KE", "SO", "DJ", "ER"]));
+
+// Get the geometry of the countries
+var regions = countries.geometry();
+Map.centerObject(regions, 5);
+
+Map.addLayer(classification.clip(regions),{min:0,max:100,
+   palette: "blue,green,yellow,red"}, "Projected suitability: other");
+   
+   Map.addLayer(hoppersAll, {color: 'red'}, 'Hoppers', false);
+   
+Map.addLayer(absence, {color: 'gray'}, 'Hoppers absent', false);
+Map.addLayer(locusts, {color: 'red'}, 'Hoppers present', false);
+
+var file_name = 'Breeding_suitability_map_1000m.tif';
+
+  // Set the export "scale" and "crs" parameters.
+Export.image.toDrive({
+  image: classification.clip(region),
+  description: file_name,
+  fileNamePrefix: file_name,
+  folder: 'GEE Locusts',
+  region: region,
+  scale: 1000,
+  crs: 'EPSG:4326'
+});
