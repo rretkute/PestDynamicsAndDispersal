@@ -1,5 +1,5 @@
 # PestDynamicsAndDispersal
- Renata Retkute, William Thurston, Keith Cressman, Christopher A. Gilligan. A framework for modelling migratory pest population dynamics and large-scale dispersal. https://www.biorxiv.org/content/10.1101/2023.07.11.548524v1
+ Renata Retkute, William Thurston, Keith Cressman, Christopher A. Gilligan. A framework for modelling migratory pest population dynamics and large-scale dispersal. 
 
 ![Schematics of the modelling framework](Figure_2.png)
 
