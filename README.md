@@ -1,4 +1,4 @@
-# A framework for modelling migratory pest population dynamics and large-scale dispersal.
+# A framework for modelling migratory pest population dynamics and large-scale dispersal
  Renata Retkute, William Thurston, Keith Cressman, Christopher A. Gilligan
 
 ![Schematics of the modelling framework](Figure_2.png)
