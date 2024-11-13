@@ -5,6 +5,8 @@ date: "05/11/2024"
 output:
   pdf_document: default
   html_document: default
+header-includes:
+  \renewcommand\thefigure{\Alph{figure}}
 ---
 
 ```{r setup, include=FALSE}
