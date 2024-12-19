@@ -1,5 +1,6 @@
 # A framework for modelling desert locust population dynamics and large-scale dispersal
  Renata Retkute, William Thurston, Keith Cressman, Christopher A. Gilligan
+ PLoS Comput Biol 20(12): e1012562 [https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012562](https://doi.org/10.1371/journal.pcbi.1012562)
 
 ![Schematics of the modelling framework](Figure_2.png)
 
